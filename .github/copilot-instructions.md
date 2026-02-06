@@ -1,5 +1,4 @@
-# VERSION : 1.0
-
+```instructions
 ## Execution Guidelines
 VERY IMPORTANT: Every time a task is started:
 - Enforce and obey rules in the .github folder; ask for permission otherwise.
@@ -37,8 +36,17 @@ Before starting a new task or a new step in the plan, update progress in the pla
 - Keep communication concise and focused.
 - Follow SAP development best practices.
 
-ADDITIONAL FILES WITH RULES IN ORDER OF PLANNED EXECUTION:
-[SAP CAP Backend Rules - Copilot Instructions](./1-sap-cap-rules.md)
-[SAP UI Frontend Rules - Copilot Instructions](./2-sap-ui-rules.md)
-[Testing Rules with Jest](./3-jest-test-rules.md)
-[After changes: Update Bruno collections in bruno/ folder](./4-bruno.md)
+PRE-TASK CHECKLIST — ENFORCING FOLDER INSTRUCTIONS FOR EVERY TASK:
+- For every task started, the agent MUST load the repository folder instructions that apply to the files or areas the task will touch (the files under `.github/instructions/`).
+- Extract the key rules from those instruction files and inject them into a short pre-task checklist that is created or updated before any substantive work begins.
+- The agent MUST use the workspace todo tool (`manage_todo_list`) to create or update that pre-task checklist, set one checklist item to `in-progress`, and keep the checklist current while working.
+- The checklist must explicitly note any instruction conflicts with higher-priority system or developer rules; in such cases follow system/developer rules and record the conflict in the checklist summary.
+- This pre-task checklist requirement applies to every task, including small edits, tests, and multi-step changes — it ensures folder-specific rules are considered on each run.
+
+```
+
+**Instruction Files**
+- .github/instructions/1-sap-cap.instructions.md — applyTo: srv/**/*.js, db/**/*.cds, srv/**/*.cds
+- .github/instructions/2-sap-ui.instructions.md — applyTo: app/**/*.js, app/**/*.xml
+- .github/instructions/3-jest-test.instructions.md — applyTo: test/**/*.js
+- .github/instructions/4-bruno.instructions.md — applyTo: bruno/**

@@ -1,3 +1,7 @@
+---
+applyTo: "app/**/*.js, app/**/*.xml"
+---
+
 # SAP UI5 Frontend Rules
 - Use the latest stable SAP UI5 LTS version patch: >=1.136.14
 - Getting started help for SAP UI5: https://sapui5.hana.ondemand.com/1.71.73/#/topic/8b49fc198bf04b2d9800fc37fecbb218
@@ -14,6 +18,7 @@
 ## Frontend rules
 
 - Use a UI5 freestyle application, not Fiori extensions.
+- Always use the BaseController.js pattern for reusable controller functions when needed in multiple controllers
 - All lists/tables are of type sap.m.Table with filters for all associations and own date fields.
 - Own app UI annotations live in each ui app/* folder and are projections on backend srv/ services.
 - When a custom action or function is needed, the implementation is made only on backend srv/ services, not in ui app/*.

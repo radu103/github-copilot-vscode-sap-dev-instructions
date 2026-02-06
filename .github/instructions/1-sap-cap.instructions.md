@@ -1,3 +1,7 @@
+---
+applyTo: "srv/**/*.js, db/**/*.cds, srv/**/*.cds"
+---
+
 ## Programming language and tools
 
 - SAP CAP Framework documentation
@@ -29,7 +33,7 @@
 - Entities are in separate files based on the main relationship domain.
 - Use Integer enums with text names.
 - Use an isActive boolean property and always use soft-delete logic; only hard-delete from persisted data in case of user roles.
-- Data IDs marked as cuid always generate UUID v4 strings.
+- Data IDs marked as cuid always generate UUID v4 strings for data/migration and testing purposes, but the database model uses String(36) to store them.
   
 ## Backend rules
 

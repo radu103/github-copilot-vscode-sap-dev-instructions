@@ -1,3 +1,7 @@
+---
+applyTo: "bruno/**"
+---
+
 # Bruno Collection Instructions
 
 - Use only OpenAPI v3 YAML format for the Bruno collection.
