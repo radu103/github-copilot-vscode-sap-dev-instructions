@@ -5,10 +5,10 @@ Purpose
 
 Key files
 - [.github/copilot-instructions.md](.github/copilot-instructions.md): primary execution guidelines and mandatory start phrase.
-- [.github/1-sap-cap-rules.md](.github/1-sap-cap-rules.md): backend (SAP CAP) rules and conventions.
-- [.github/2-sap-ui-rules.md](.github/2-sap-ui-rules.md): frontend (UI5) rules.
-- [.github/3-jest-test-rules.md](.github/3-jest-test-rules.md): testing rules.
-- [.github/4-bruno.md](.github/4-bruno.md): Bruno collection instructions.
+- [.github/instructions/1-sap-cap-rules.md](.github/1-sap-cap.instructions..md): backend (SAP CAP) rules and conventions.
+- [.github/instructions/2-sap-ui-rules.md](.github/2-sap-ui.instructions..md): frontend (UI5) rules.
+- [.github/instructions/3-jest-test-rules.md](.github/3-jest-test.instructions.md): testing rules.
+- [.github/instructions/4-bruno.md](.github/4-bruno.instructions.md): Bruno collection instructions.
 
 How to use these instructions (quick guide)
 1. Read the `.github` files listed above before beginning any task.
