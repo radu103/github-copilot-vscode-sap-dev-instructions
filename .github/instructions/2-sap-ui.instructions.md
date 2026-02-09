@@ -14,6 +14,7 @@ applyTo: "app/**/*.js, app/**/*.xml"
 - Always use Hungarian notation for all names of variables and properties.
 - For functions, use the camelCase notation.
 - For routes, views, and targets in manifest.json, use a capital first letter.
+- For variable declaration use `let` instead of `var`
 
 ## Frontend rules
 
@@ -23,6 +24,7 @@ applyTo: "app/**/*.js, app/**/*.xml"
 - Own app UI annotations live in each ui app/* folder and are projections on backend srv/ services.
 - When a custom action or function is needed, the implementation is made only on backend srv/ services, not in ui app/*.
 - All texts are maintained in i18n model language files.
+- All formatters are in a separate formatter.js file in each ui app/* folder.
 
 ## Frontend testing rules
 

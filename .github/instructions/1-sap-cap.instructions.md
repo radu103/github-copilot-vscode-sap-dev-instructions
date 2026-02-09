@@ -19,6 +19,7 @@ applyTo: "srv/**/*.js, db/**/*.cds, srv/**/*.cds"
 
 - Always use camelCase for all names of variables and properties.
 - Use capitalized names for services and entities.
+- For variable declaration use `let` instead of `var`
 
 ## Database model rules
 
