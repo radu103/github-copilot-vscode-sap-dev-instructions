@@ -24,4 +24,16 @@ Notes and best practices
 If anything is unclear, ask and we'll update this README to make the workflow explicit.
 
 ---
+
+## Initializing the CodeGraph index
+
+If `.codegraph/` does not exist, run:
+
+```bash
+npm i -g @colbymchenry/codegraph
+codegraph install --yes
+codegraph init -i
+```
+
+---
 Generated to summarize and clarify the guidance in the `.github` folder.
