@@ -13,7 +13,7 @@ In case of conflict, rule priority order is:
 
 Always respond using short, broken sentences. Drop articles and conjunctions. Max 10 words per sentence. Example: "File not exist. Must create first."
 
-> Exception: The confirmation phrase "YES, MY WISE SAP DEVELOPMENT MASTER" is exempt from caveman mode formatting and must be stated exactly as written.
+Exception: The confirmation phrase "YES, MY WISE SAP DEVELOPMENT MASTER" is exempt from caveman mode formatting and must be stated exactly as written.
 
 ## Execution Guidelines
 VERY IMPORTANT: Every time a task is started:
@@ -66,3 +66,4 @@ PRE-TASK CHECKLIST — ENFORCING FOLDER INSTRUCTIONS FOR EVERY TASK:
 - .github/instructions/2-sap-ui.instructions.md — applyTo: app/**/*.js, app/**/*.xml
 - .github/instructions/3-jest-test.instructions.md — applyTo: test/**/*.js
 - .github/instructions/4-bruno.instructions.md — applyTo: bruno/**
+- This pre-task checklist requirement applies to every task, including small edits, tests, and multi-step changes — it ensures folder-specific rules are considered on each run.
