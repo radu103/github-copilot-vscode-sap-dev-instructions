@@ -1,0 +1,35 @@
+name: PR title check (dev)
+
+on:
+  pull_request:
+    branches: [dev]
+    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  pr-title:
+    name: Check PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate JIRA ID in PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^\[[A-Z]{2,10}\]-[0-9]+ .+$'
+          if [[ "$PR_TITLE" =~ $pattern ]]; then
+            echo "PR title OK: $PR_TITLE"
+          else
+            echo "::error title=Invalid PR title::Title must match [ABCDE]-12345 <summary>. Got: $PR_TITLE"
+            exit 1
+          fi
+
+      - name: Validate source branch
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          if [[ "$HEAD_REF" != feature/* ]]; then
+            echo "::error title=Invalid source branch::PRs to dev must come from feature/* branches. Got: $HEAD_REF"
+            exit 1
+          fi

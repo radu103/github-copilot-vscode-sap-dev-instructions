@@ -1,0 +1,17 @@
+{
+  "name": "github-copilot-vscode-sap-dev-instructions",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prettier:check": "prettier --check . \"!.github\" \"!bruno\" \"!gen\"",
+    "prettier:fix": "prettier --write . \"!.github\" \"!bruno\" \"!gen\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0"
+  }
+}

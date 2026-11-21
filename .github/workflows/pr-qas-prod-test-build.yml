@@ -1,0 +1,52 @@
+name: PR test and build (qas, prod)
+
+on:
+  pull_request:
+    branches: [qas, prod]
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  jest:
+    name: Jest tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Check scripts.test exists
+        run: node -e "if(!require('./package.json').scripts?.test){console.error('scripts.test missing in package.json');process.exit(1)}"
+      - run: npm ci
+      - name: Run Jest tests from package.json
+        run: npm test
+
+  mtar-build:
+    name: MTAR build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Check mta.yaml exists
+        run: test -f mta.yaml || { echo "mta.yaml missing at repo root"; exit 1; }
+      - run: npm ci
+      - name: Install MBT
+        run: npm install -g mbt
+      - name: Build MTAR
+        run: mbt build -t ./mta_archives
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mtar
+          path: mta_archives/*.mtar
+          if-no-files-found: error
+          retention-days: 30
