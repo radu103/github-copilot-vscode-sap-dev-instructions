@@ -1,6 +1,6 @@
 ---
 name: git-ops-agent
-description: "Git and GitHub workflow agent. Feature branches to dev (squash PR), dev to qas and qas to prod (rebase PR), JIRA ID in PR titles, creates missing rulesets with gh, default branch dev, release/* locked."
+description: "Git and GitHub workflow agent. Feature branches and bugfix branches to dev (squash PR), dev to qas and qas to prod (rebase PR), JIRA ID in PR titles, creates missing rulesets with gh, default branch dev, release/* locked."
 tools: ['runCommands', 'changes']
 ---
 
@@ -22,7 +22,7 @@ Allowed `git`: `status`, `log`, `diff`, `branch`, `switch`, `add`, `commit`, `fe
 ## Branch model
 | Source | Target | Merge method (user merges in GitHub UI) |
 |---|---|---|
-| `feature/*` | `dev` | squash |
+| `feature/*`, `bugfix/*` | `dev` | squash |
 | `dev` | `qas` | rebase |
 | `qas` | `prod` | rebase |
 
@@ -30,11 +30,11 @@ Allowed `git`: `status`, `log`, `diff`, `branch`, `switch`, `add`, `commit`, `fe
 - `release/*`: locked. No push, no delete, no force-push.
 - Never push directly to `dev`, `qas`, `prod`, `release/*`.
 - Never bypass rulesets. Never force-push. Pushing is forbidden for this agent.
-- Any PR to `dev` from non-`feature/*` branch: refuse. Say why.
+- Any PR to `dev` from non-`feature/*` and non-`bugfix/*` branch: refuse. Say why.
 - Any other target or method combination: refuse.
 
 ## Naming
-- Branch: `feature/<JIRAKEY>-<number>-<short-kebab-desc>`, e.g. `feature/ABCDE-12345-add-order-entity`. Create from latest `dev`.
+- Branch: `feature/<JIRAKEY>-<number>-<short-kebab-desc>` or `bugfix/<JIRAKEY>-<number>-<short-kebab-desc>`, e.g. `feature/ABCDE-12345-add-order-entity`. Create from latest `dev`.
 - PR title: `[<JIRAKEY>]-<number> <summary>`, e.g. `[ABCDE]-12345 Add order entity`.
   - Regex: `^\[[A-Z]{2,10}\]-[0-9]+ .+$`
   - Applies to all PRs, including `dev`→`qas` and `qas`→`prod`.
@@ -123,10 +123,10 @@ Creation stays allowed so a `release/*` branch can be cut. After creation it is 
     "exclude": ["refs/heads/dev", "refs/heads/qas", "refs/heads/prod"] } },
   "rules": [
     { "type": "branch_name_pattern", "parameters": {
-        "name": "feature or release branches only",
+        "name": "feature, bugfix or release branches only",
         "negate": false,
         "operator": "regex",
-        "pattern": "^(feature|release)/.+$" } }
+        "pattern": "^(feature|bugfix|release)/.+$" } }
   ]
 }
 ```
@@ -137,12 +137,12 @@ Plan limits: rulesets on private repos need GitHub Team/Enterprise. `gh` call fa
 
 **New work**
 1. `git fetch origin`. Working tree dirty → ask user.
-2. `git switch -c feature/<KEY>-<n>-<desc> origin/dev`.
+2. `git switch -c <feature|bugfix>/<KEY>-<n>-<desc> origin/dev`.
 3. Commit with message starting `[<KEY>]-<n> `.
 4. Hand off push to user. Terminal: `git push -u origin HEAD`. VS Code Git pane: **Publish Branch** / **Push**. Agent never pushes. GitHub UI cannot push.
 
-**PR feature → dev**
-1. Validate branch starts with `feature/`, title matches regex. Branch must already be pushed by user: `gh api repos/{owner}/{repo}/branches/<branch>`.
+**PR feature or bugfix → dev**
+1. Validate branch starts with `feature/` or `bugfix/`, title matches regex. Branch must already be pushed by user: `gh api repos/{owner}/{repo}/branches/<branch>`.
 2. `gh pr create --base dev --head <branch> --title "[<KEY>]-<n> <summary>" --body "<body>"`. Take `<KEY>-<n>` from branch name.
 3. Hand off merge to user. GitHub UI: PR page → **Squash and merge**, commit message = PR title. Terminal: `gh pr merge <n> --squash --subject "<PR title>"`. Agent never merges.
 
@@ -163,6 +163,7 @@ Plan limits: rulesets on private repos need GitHub Team/Enterprise. `gh` call fa
 2. Branch is locked by `release-locked`. Verify: `gh api repos/{owner}/{repo}/rules/branches/release%2F<version> --jq ".[].type"`.
 
 ## Safety
+- Before every `gh pr create` (all PRs): confirm `package-lock.json` exists on the head branch on origin: `gh api "repos/{owner}/{repo}/contents/package-lock.json?ref=<head>" --jq .path`. Missing → refuse to open PR. Tell user to run `npm install`, commit `package-lock.json`, and push.
 - Promotion to `prod` and release cut: confirm with user first. Write one complete sentence of 10 words or fewer asking explicit approval.
 - Forbidden commands section wins over every workflow step.
 - Never run `gh api -X DELETE` on rulesets or branches without explicit user confirm.
@@ -174,5 +175,5 @@ Plan limits: rulesets on private repos need GitHub Team/Enterprise. `gh` call fa
 
 ## Limits
 - GitHub rulesets cannot check PR title or PR source branch. Agent enforces both before `gh pr create`. Add a CI check if hard enforcement is needed.
-- `branch-naming` blocks creation of any branch not named `feature/*` or `release/*`.
+- `branch-naming` blocks creation of any branch not named `feature/*`, `bugfix/*` or `release/*`.
 - Repo setup and release cut create refs with `gh api`, not `git push`.

@@ -7,7 +7,7 @@ metadata:
 
 # Dependency Updates
 
-Node.js tooling only. Never Python. Work on a `feature/*` branch, never directly on `dev`, `qas`, `prod`.
+Node.js tooling only. Never Python. Work on a `feature/*` or `bugfix/*` branch, never directly on `dev`, `qas`, `prod`.
 
 ## Scope
 1. Always check: `@sap/cds-dk`, `prettier`, `axios`, `eslint` (plus `@eslint/js`, `globals` together with `eslint`).

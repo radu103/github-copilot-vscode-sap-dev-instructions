@@ -24,6 +24,8 @@ jobs:
           cache: npm
       - name: Check scripts.test exists
         run: node -e "if(!require('./package.json').scripts?.test){console.error('scripts.test missing in package.json');process.exit(1)}"
+      - name: Check package-lock.json exists
+        run: test -f package-lock.json || { echo "package-lock.json missing in repo"; exit 1; }
       - run: npm ci
       - name: Run Jest tests from package.json
         run: npm test
@@ -39,6 +41,8 @@ jobs:
           cache: npm
       - name: Check mta.yaml exists
         run: test -f mta.yaml || { echo "mta.yaml missing at repo root"; exit 1; }
+      - name: Check package-lock.json exists
+        run: test -f package-lock.json || { echo "package-lock.json missing in repo"; exit 1; }
       - run: npm ci
       - name: Install MBT
         run: npm install -g mbt

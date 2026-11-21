@@ -22,8 +22,8 @@ Two separate workflows. Never merge them.
 - Title passed via `env`, never inline `${{ }}` in `run`. Prevents script injection.
 
 ## Source branch rule (dev)
-- Allowed: `feature/*` only.
-- Any other source branch: fail job `Check PR title` with message `Source branch must match feature/*`.
+- Allowed: `feature/*` and `bugfix/*`.
+- Any other source branch: fail job `Check PR title` with message `Source branch must match feature/* or bugfix/*`.
 
 ## Job names
 - The dev workflow defines a single job with id `check-pr-title` and `name: Check PR title`.
@@ -40,7 +40,9 @@ Two separate workflows. Never merge them.
 ## Pre-requirements in the CAP project
 - `package.json` has `scripts.test` running Jest.
 - `mta.yaml` exists at repo root (generate: `cds add mta`).
-- `package-lock.json` committed (needed by `npm ci`).
+- `package-lock.json` committed and pushed (needed by `npm ci`). Required for every PR, to `dev`, `qas` and `prod`.
+- Dev workflow: job `Check PR title` also fails with `package-lock.json missing in repo` if the file is absent.
+- qas/prod: `jest` and `mtar-build` jobs fail with the same message before `npm ci`.
 
 ## Branch protection
 - Add required status checks in rulesets: `Check PR title` on `dev`; `Jest tests` and `MTAR build` on `qas`, `prod`.

@@ -13,6 +13,10 @@ jobs:
     name: Check PR title
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - name: Check package-lock.json exists
+        run: test -f package-lock.json || { echo "::error title=Missing lock file::package-lock.json missing in repo"; exit 1; }
+
       - name: Validate JIRA ID in PR title
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
@@ -29,7 +33,7 @@ jobs:
         env:
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          if [[ "$HEAD_REF" != feature/* ]]; then
-            echo "::error title=Invalid source branch::PRs to dev must come from feature/* branches. Got: $HEAD_REF"
+          if [[ "$HEAD_REF" != feature/* && "$HEAD_REF" != bugfix/* ]]; then
+            echo "::error title=Invalid source branch::PRs to dev must come from feature/* or bugfix/* branches. Got: $HEAD_REF"
             exit 1
           fi
