@@ -6,21 +6,49 @@ Purpose
 
 Key files
 
-- [.github/copilot-instructions.md](.github/copilot-instructions.md): primary execution guidelines and mandatory start phrase.
-- [.github/skills/sap-cap/SKILL.md](.github/skills/sap-cap/SKILL.md): backend (SAP CAP) rules and conventions.
-- [.github/skills/sap-ui5/SKILL.md](.github/skills/sap-ui5/SKILL.md): frontend (UI5) rules.
-- [.github/skills/jest-testing/SKILL.md](.github/skills/jest-testing/SKILL.md): testing rules.
-- [.github/skills/bruno-collection/SKILL.md](.github/skills/bruno-collection/SKILL.md): Bruno collection rules.
-- [.github/skills/github-pr-workflows/SKILL.md](.github/skills/github-pr-workflows/SKILL.md): PR check workflows.
-- [.github/agents/](.github/agents): developer, reviewer, jest-tester, cap-to-bruno, git-ops agents.
+- [AGENTS.md](AGENTS.md): entry point for Copilot and Claude Code. Lists skills, agents, prompts, global rules. [CLAUDE.md](CLAUDE.md) redirects to it.
+
+Skills (`.github/skills/<name>/SKILL.md`)
+
+| Skill | Use for |
+|---|---|
+| [sap-cap](.github/skills/sap-cap/SKILL.md) | `db/**/*.cds`, `srv/**` backend rules |
+| [sap-ui5](.github/skills/sap-ui5/SKILL.md) | `app/**` frontend rules |
+| [jest-testing](.github/skills/jest-testing/SKILL.md) | `test/**` testing rules |
+| [bruno-collection](.github/skills/bruno-collection/SKILL.md) | `bruno/**` collection rules |
+| [github-pr-workflows](.github/skills/github-pr-workflows/SKILL.md) | `.github/workflows/**` PR checks |
+| [dependency-updates](.github/skills/dependency-updates/SKILL.md) | npm updates, Dependabot, `npm audit` |
+| [caveman](.github/skills/caveman/SKILL.md) | terse response style |
+
+Agents (`.github/agents/*.agent.md`)
+
+| Agent | Role |
+|---|---|
+| [sap-btp-code-developer](.github/agents/sap-btp-code-developer.agent.md) | implements db, srv, app code |
+| [sap-btp-code-reviewer](.github/agents/sap-btp-code-reviewer.agent.md) | read-only review, dependency upgrade table |
+| [jest-tester](.github/agents/jest-tester.agent.md) | writes Jest tests |
+| [cap-to-bruno](.github/agents/cap-to-bruno.agent.md) | Bruno collections from CDS services |
+| [git-ops-agent](.github/agents/git-ops-agent.agent.md) | git and GitHub workflow |
+
+Prompts (`.github/prompts/*.prompt.md`)
+
+| Prompt | Does |
+|---|---|
+| [new-entity](.github/prompts/new-entity.prompt.md) | new CDS entity, types, CSV, service exposure |
+| [new-service-action](.github/prompts/new-service-action.prompt.md) | custom action or function with handler |
+| [new-ui5-list-app](.github/prompts/new-ui5-list-app.prompt.md) | UI5 list app |
+| [write-tests](.github/prompts/write-tests.prompt.md) | Jest tests for handler or utils |
+| [generate-bruno](.github/prompts/generate-bruno.prompt.md) | Bruno folder per CDS service file |
+| [review-changes](.github/prompts/review-changes.prompt.md) | review changes against repo rules |
+| [caveman](.github/prompts/caveman.prompt.md) | activate caveman voice |
 
 How to use these instructions (quick guide)
 
-1. Read the `.github` files listed above before beginning any task.
-2. Before starting work, comply with the primary requirement in copilot-instructions.md: state the confirmation phrase exactly as written: "YES, MY WISE SAP DEVELOPMENT MASTER".
-3. Use the repository's progress/todo system to plan and track work. Update the todo list at the start of each task and mark items completed when done.
-4. Follow the language-specific rules in the corresponding file (for example, use the SAP CAP rules for backend work and the UI5 rules for frontend work).
-5. Ask for permission before adding new top-level files or folders. If you need to change the rules in `.github`, request approval first.
+1. Load the skill matching the files you change. Agents load skills themselves.
+2. State the confirmation phrase exactly as written: "YES, MY WISE SAP DEVELOPMENT MASTER".
+3. Plan short checklist and update it as you work.
+4. Follow the skill rules for the area (CAP for backend, UI5 for frontend).
+5. Ask for permission before adding new files or folders. If you need to change skills or agents, request approval first.
 
 Notes and best practices
 
@@ -49,6 +77,12 @@ cds --version
 ```
 
 4. Install project dependencies: `npm install`.
+
+---
+
+## Claude Code skills link
+
+Claude Code reads skills from `.claude/skills`. Link it to `.github/skills` so both tools share one copy. On Windows, `mklink /J .claude\skills .github\skills` does it.
 
 ---
 
