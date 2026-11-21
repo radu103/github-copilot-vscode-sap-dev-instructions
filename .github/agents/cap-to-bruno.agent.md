@@ -1,7 +1,6 @@
 ---
 name: cap-to-bruno
 description: "Creates one Bruno collection folder per CDS service file under bruno/. Generates OpenAPI v3 YAML for each OData service in that file, plus opencollection.yml with auth in each folder."
-tools: ['search', 'codebase', 'editFiles', 'runCommands']
 ---
 
 # CAP to Bruno

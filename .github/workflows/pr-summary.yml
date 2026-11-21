@@ -1,0 +1,73 @@
+name: PR summary bot
+
+on:
+  pull_request:
+    branches: [dev, qas, prod]
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  models: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  summary:
+    name: PR summary
+    runs-on: ubuntu-latest
+    # Fork PRs get a read-only token and cannot post comments.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA" "$HEAD_SHA"
+          git diff --no-color -U1 "$BASE_SHA" "$HEAD_SHA" -- . ':(exclude)package-lock.json' | head -c 60000 > pr.diff
+          git diff --stat "$BASE_SHA" "$HEAD_SHA" > pr.stat
+          cat > pr.prompt.yml <<'EOF'
+          messages:
+            - role: system
+              content: You summarize pull requests for SAP CAP and UI5 projects. Be concise. Use markdown.
+            - role: user
+              content: |
+                Summarize this pull request. Output sections "Summary" (max 3 bullets), "Risks" (max 3 bullets), "Suggested squash title" (one line, imperative, max 60 characters, no JIRA prefix).
+
+                Diff stat:
+                {{stat}}
+
+                Diff:
+                {{diff}}
+          model: openai/gpt-4o-mini
+          EOF
+      - name: Summarize with GitHub Models
+        id: ai
+        uses: actions/ai-inference@v1
+        with:
+          prompt-file: pr.prompt.yml
+          file_input: |
+            stat: pr.stat
+            diff: pr.diff
+      - name: Post or update summary comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          RESPONSE_FILE: ${{ steps.ai.outputs.response-file }}
+        run: |
+          {
+            echo "<!-- pr-summary-bot -->"
+            echo "## 🤖 PR summary"
+            echo
+            cat "$RESPONSE_FILE"
+          } > comment.md
+          id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments" --paginate --jq '.[] | select(.body | startswith("<!-- pr-summary-bot -->")) | .id' | head -n1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${id}" -F body=@comment.md
+          else
+            gh pr comment "$PR_NUMBER" --body-file comment.md
+          fi

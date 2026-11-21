@@ -80,9 +80,15 @@ cds --version
 
 ---
 
-## Claude Code skills link
+## Commit message hook
 
-Claude Code reads skills from `.claude/skills`. Link it to `.github/skills` so both tools share one copy. On Windows, `mklink /J .claude\skills .github\skills` does it.
+`.githooks/prepare-commit-msg` suggests a commit message on plain `git commit`: `[KEY]-n` from the `feature/` or `bugfix/` branch name, a summary from staged areas, a staged file list, and a warning if `package-lock.json` is not staged. It skips `-m`, merge, squash and amend. Enabled by `npm install` (`prepare` script) or manually: `git config core.hooksPath .githooks`.
+
+---
+
+## Claude Code skills and agents link
+
+Claude Code reads skills from `.claude/skills` and agents from `.claude/agents`. Link them to `.github` so both tools share one copy. On Windows, `mklink /J .claude\skills .github\skills` does it. Agents: `mklink /J .claude\agents .github\agents` (experimental: Copilot tool names and `.agent.md` file names may not map in Claude Code).
 
 ---
 

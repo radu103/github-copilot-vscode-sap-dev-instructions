@@ -1,7 +1,6 @@
 ---
 name: jest-tester
 description: "Creates Jest tests for SAP CAP service handlers and utils functions in test/. At least 3 meaningful tests per custom function."
-tools: ['search', 'codebase', 'editFiles', 'runCommands', 'runTests', 'fetch']
 ---
 
 # Jest Tester

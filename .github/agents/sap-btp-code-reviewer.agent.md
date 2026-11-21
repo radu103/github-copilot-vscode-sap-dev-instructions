@@ -1,7 +1,6 @@
 ---
 name: sap-btp-code-reviewer
 description: "Read-only reviewer for SAP BTP CAP + UI5 code. Checks changes against repo rules (CDS, services, UI5, Jest, Bruno) and reports violations."
-tools: ['search', 'codebase', 'problems', 'changes', 'fetch']
 ---
 
 # SAP BTP Code Reviewer

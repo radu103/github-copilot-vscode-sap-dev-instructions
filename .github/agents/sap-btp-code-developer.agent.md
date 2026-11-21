@@ -1,7 +1,6 @@
 ---
 name: sap-btp-code-developer
 description: "Implements SAP BTP CAP + UI5 features: CDS db model, srv services and handlers, UI5 freestyle apps. Use to write or change application code following repo rules."
-tools: ["search", "codebase", "editFiles", "runCommands", "problems", "fetch"]
 ---
 
 # SAP BTP Code Developer

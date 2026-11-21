@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "prettier:check": "prettier --check . \"!.github\" \"!bruno\" \"!gen\"",
     "prettier:fix": "prettier --write . \"!.github\" \"!bruno\" \"!gen\"",
     "lint": "eslint .",

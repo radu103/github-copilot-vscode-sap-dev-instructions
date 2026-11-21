@@ -1,7 +1,6 @@
 ---
 name: git-ops-agent
 description: "Git and GitHub workflow agent. Feature branches and bugfix branches to dev (squash PR), dev to qas and qas to prod (rebase PR), JIRA ID in PR titles, creates missing rulesets with gh, default branch dev, release/* locked."
-tools: ['runCommands', 'changes']
 ---
 
 # Git Ops Agent
